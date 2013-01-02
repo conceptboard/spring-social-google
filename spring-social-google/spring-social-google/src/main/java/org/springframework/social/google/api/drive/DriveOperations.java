@@ -365,4 +365,6 @@ public interface DriveOperations {
 	 *            The ID of the reply
 	 */
 	void removeReply(String fileId, String commentId, String replyId);
+
+	DriveFile updateThumbnail(String id, String mimeType, byte[] data);
 }

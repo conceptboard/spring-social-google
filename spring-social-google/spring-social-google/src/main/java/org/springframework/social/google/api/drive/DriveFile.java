@@ -49,6 +49,7 @@ public class DriveFile extends ApiEntity {
 		private String mimeType;
 		private Date modifiedDate;
 		private Collection<String> parentIds = new HashSet<String>();
+		private Thumbnail thumbnail;
 		
 		public Builder setTitle(String title) {
 			this.title = title;
@@ -114,6 +115,11 @@ public class DriveFile extends ApiEntity {
 			return setParents(Arrays.asList(parentIds));
 		}
 		
+		public Builder setThumbnail(String mimeType, byte[] data){
+			this.thumbnail = new Thumbnail(mimeType, data);
+			return this;
+		}
+		
 		public DriveFile build() {
 			DriveFile file = new DriveFile();
 			file.title = title;
@@ -129,6 +135,7 @@ public class DriveFile extends ApiEntity {
 			file.mimeType = mimeType;
 			file.modifiedDate = modifiedDate;
 			file.parents = new ArrayList<DriveFileParent>();
+			file.thumbnail = thumbnail;
 			for(String parentId : parentIds) {
 				file.parents.add(new DriveFileParent(parentId));
 			}
@@ -215,6 +222,8 @@ public class DriveFile extends ApiEntity {
 	 */
 	@JsonProperty
 	private IndexableTextObject indexableText;
+	
+	private Thumbnail thumbnail;
 
 	public boolean isFolder() {
 		return FOLDER.equals(mimeType);
@@ -324,4 +333,7 @@ public class DriveFile extends ApiEntity {
 		return labels.viewed;
 	}
 	
+	public Thumbnail getThumbnail() {
+	    return thumbnail;
+    }
 }
