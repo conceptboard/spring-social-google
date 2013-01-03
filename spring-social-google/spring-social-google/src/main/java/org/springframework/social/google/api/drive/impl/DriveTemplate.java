@@ -37,6 +37,7 @@ import org.springframework.social.google.api.drive.FileComment;
 import org.springframework.social.google.api.drive.FileCommentQueryBuilder;
 import org.springframework.social.google.api.drive.FileCommentsPage;
 import org.springframework.social.google.api.drive.FileRevision;
+import org.springframework.social.google.api.drive.Thumbnail;
 import org.springframework.social.google.api.drive.UploadParameters;
 import org.springframework.social.google.api.drive.UserPermission;
 import org.springframework.social.google.api.impl.AbstractGoogleApiOperations;
@@ -293,4 +294,12 @@ public class DriveTemplate extends AbstractGoogleApiOperations implements
 		restTemplate.delete(DRIVE_FILES_URL + fileId + COMMENTS + commentId + REPLIES + replyId);
 	}
 
+	@Override
+	public DriveFile updateThumbnail(String id, String mimeType, byte[] data){
+		Object patch = new PatchBuilder()
+			.set("thumbnail", new Thumbnail(mimeType, data))
+			.getMap();
+
+		return patch(DRIVE_FILES_URL + id, patch, DriveFile.class);
+	}
 }
