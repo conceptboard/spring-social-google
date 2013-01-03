@@ -191,6 +191,14 @@ public class DriveTemplate extends AbstractGoogleApiOperations implements
 	}
 
 	@Override
+	public DriveFile rename(String id, String title){
+		Object patch = new PatchBuilder()
+			.set("title", title)
+			.getMap();
+		return patch(DRIVE_FILES_URL + id, patch, DriveFile.class);
+	}
+
+	@Override
 	public List<UserPermission> getPermissions(String fileId) {
 		return getEntity(DRIVE_FILES_URL + fileId + PERMISSIONS, UserPermissionsList.class).getItems();
 	}

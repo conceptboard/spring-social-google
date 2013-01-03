@@ -199,6 +199,8 @@ public interface DriveOperations {
 	 */
 	DriveFile createFolder(String parentId, String name);
 
+	DriveFile rename(String id, String title);
+
 	/**
 	 * Returns the permissions of a file
 	 * 
