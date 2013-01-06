@@ -138,7 +138,9 @@ public class DriveFile extends ApiEntity {
 			file.parents = new ArrayList<DriveFileParent>();
 			file.thumbnail = thumbnail;
 			for(String parentId : parentIds) {
-				file.parents.add(new DriveFileParent(parentId));
+				if(parentId != null){
+					file.parents.add(new DriveFileParent(parentId));
+				}
 			}
 			return file;
 		}
