@@ -15,10 +15,14 @@
  */
 package org.springframework.social.google.connect;
 
+import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.ConnectionData;
+import org.springframework.social.connect.support.OAuth2Connection;
 import org.springframework.social.connect.UserProfile;
 import org.springframework.social.connect.support.OAuth2ConnectionFactory;
 import org.springframework.social.google.api.Google;
 import org.springframework.social.oauth2.AccessGrant;
+import org.springframework.social.oauth2.OAuth2ServiceProvider;
 
 /**
  * Google ConnectionFactory implementation.
@@ -26,9 +30,19 @@ import org.springframework.social.oauth2.AccessGrant;
  */
 public class GoogleConnectionFactory extends OAuth2ConnectionFactory<Google> {
 
+	private final String clientId;
+	private final String clientSecret;
+
 	public GoogleConnectionFactory(String clientId, String clientSecret) {
 		super("google", new GoogleServiceProvider(clientId, clientSecret),
 				new GoogleAdapter());
+		this.clientId = clientId;
+		this.clientSecret = clientSecret;
+	}
+
+	@Override
+	public Connection<Google> createConnection(ConnectionData data) {
+		return new OAuth2Connection<Google>(data, getGoogleServiceProvider(data.getProviderUserId()), getApiAdapter());
 	}
 
 	@Override
@@ -36,5 +50,9 @@ public class GoogleConnectionFactory extends OAuth2ConnectionFactory<Google> {
 		Google api = ((GoogleServiceProvider)getServiceProvider()).getApi(accessGrant.getAccessToken());
 	    UserProfile userProfile = getApiAdapter().fetchUserProfile(api);
 	    return userProfile.getUsername();
+	}
+
+	private OAuth2ServiceProvider<Google> getGoogleServiceProvider(String quotaUserId) {
+		return new GoogleServiceProvider(clientId, clientSecret, quotaUserId);
 	}
 }

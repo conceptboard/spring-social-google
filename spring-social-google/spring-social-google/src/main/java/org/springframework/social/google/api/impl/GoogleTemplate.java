@@ -31,6 +31,7 @@ import java.util.List;
 import javax.xml.transform.Source;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -62,7 +63,10 @@ import org.springframework.social.oauth2.OAuth2Version;
  */
 public class GoogleTemplate extends AbstractOAuth2ApiBinding implements Google {
 	
-	private String accessToken;
+	public static final String GOOGLE_QUOTA_USER_URL_PARAM = "quotaUser";
+
+	private final String accessToken;
+	private final String quotaUserId;
 
 	private UserInfoOperations userOperations;
 	private PlusOperations plusOperations;
@@ -74,7 +78,7 @@ public class GoogleTemplate extends AbstractOAuth2ApiBinding implements Google {
 	 * This constructor creates a new GoogleTemplate able to perform unauthenticated operations against Google+.
 	 */
 	public GoogleTemplate() {
-		initialize();
+		this(null, null)
 	}
 	
 	/**
@@ -83,8 +87,18 @@ public class GoogleTemplate extends AbstractOAuth2ApiBinding implements Google {
 	 * @param accessToken an access token granted by Google after OAuth2 authentication
 	 */
 	public GoogleTemplate(String accessToken) {
+		this(accessToken, null);
+	}
+
+	/**
+	 * Creates a new instance of GoogleTemplate.
+	 * This constructor creates the FacebookTemplate using a given access token.
+	 * @param accessToken an access token granted by Google after OAuth2 authentication
+	 */
+	public GoogleTemplate(String accessToken, String quotaUserId) {
 		super(accessToken);
 		this.accessToken = accessToken;
+		this.quotaUserId = quotaUserId;
 		initialize();
 	}
 
@@ -157,4 +171,17 @@ public class GoogleTemplate extends AbstractOAuth2ApiBinding implements Google {
 		return accessToken;
 	}
 
+	@Override
+	protected void configureRestTemplate(RestTemplate restTemplate) {
+		super.configureRestTemplate(restTemplate);
+		if (!Strings.isNullOrEmpty(quotaUserId)) {
+			List<ClientHttpRequestInterceptor> interceptors = new LinkedList<ClientHttpRequestInterceptor>();
+			List<ClientHttpRequestInterceptor> currentInterceptors = restTemplate.getInterceptors();
+			if (currentInterceptors != null) {
+				interceptors.addAll(currentInterceptors);
+			}
+			interceptors.add(new AddUrlParamInterceptor(GoogleTemplate.GOOGLE_QUOTA_USER_URL_PARAM, quotaUserId));
+			restTemplate.setInterceptors(interceptors);
+		}
+	}
 }
