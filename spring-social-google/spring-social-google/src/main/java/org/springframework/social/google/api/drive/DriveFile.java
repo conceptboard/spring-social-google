@@ -27,8 +27,6 @@ import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.springframework.social.google.api.ApiEntity;
 
-import com.google.common.base.Strings;
-
 /**
  * Model class representing a file in Google Drive
  * @author Gabriel Axel
@@ -140,9 +138,7 @@ public class DriveFile extends ApiEntity {
 			file.parents = new ArrayList<DriveFileParent>();
 			file.thumbnail = thumbnail;
 			for(String parentId : parentIds) {
-				if(parentId != null){
-					file.parents.add(new DriveFileParent(parentId));
-				}
+				file.parents.add(new DriveFileParent(parentId));
 			}
 			return file;
 		}
