@@ -7,7 +7,7 @@
 	<version>1.0.0.M2</version>
 
 	<properties>
-		<spring.social.version>1.1.0.M1</spring.social.version>
+		<spring.social.version>1.0.2.RELEASE</spring.social.version>
 		<spring.framework.version>3.1.2.RELEASE</spring.framework.version>
 	</properties>
 
