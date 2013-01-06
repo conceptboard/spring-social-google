@@ -28,11 +28,19 @@ public class GoogleServiceProvider extends AbstractOAuth2ServiceProvider<Google>
 	private final String quotaUserId;
 
 	public GoogleServiceProvider(String clientId, String clientSecret) {
-		this(clientId, clientSecret, null);
+		this(clientId, clientSecret, null, false);
 	}
 	
 	public GoogleServiceProvider(String clientId, String clientSecret, String quotaUserId) {
-		super(new GoogleOAuth2Template(clientId, clientSecret));
+		this(clientId, clientSecret, quotaUserId, false);
+	}
+
+	public GoogleServiceProvider(String clientId, String clientSecret, boolean offline) {
+		this(clientId, clientSecret, null, offline);
+	}
+
+	public GoogleServiceProvider(String clientId, String clientSecret, String quotaUserId, boolean offline) {
+		super(new GoogleOAuth2Template(clientId, clientSecret, offline));
 		this.quotaUserId = quotaUserId;
 	}
 

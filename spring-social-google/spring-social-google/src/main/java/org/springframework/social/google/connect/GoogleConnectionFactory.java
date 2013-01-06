@@ -36,11 +36,18 @@ public class GoogleConnectionFactory extends OAuth2ConnectionFactory<Google> {
 
 	private final String clientSecret;
 
+	private final boolean offline;
+
 	public GoogleConnectionFactory(String clientId, String clientSecret) {
-		super("google", new GoogleServiceProvider(clientId, clientSecret),
+		this(clientId, clientSecret, false);
+	}
+
+	public GoogleConnectionFactory(String clientId, String clientSecret, boolean offline) {
+		super("google", new GoogleServiceProvider(clientId, clientSecret, offline),
 				new GoogleAdapter());
 		this.clientId = clientId;
 		this.clientSecret = clientSecret;
+		this.offline = offline;
 	}
 
 	@Override
@@ -72,6 +79,6 @@ public class GoogleConnectionFactory extends OAuth2ConnectionFactory<Google> {
 	}
 
 	private OAuth2ServiceProvider<Google> getGoogleServiceProvider(String quotaUserId) {
-		return new GoogleServiceProvider(clientId, clientSecret, quotaUserId);
+		return new GoogleServiceProvider(clientId, clientSecret, quotaUserId, offline);
 	}
 }
