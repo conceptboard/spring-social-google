@@ -15,9 +15,10 @@
  */
 package org.springframework.social.google.connect;
 
-import org.springframework.social.connect.UserProfile;
+import org.springframework.social.InvalidAuthorizationException;
 import org.springframework.social.connect.support.OAuth2ConnectionFactory;
 import org.springframework.social.google.api.Google;
+import org.springframework.social.google.api.token.TokenInfo;
 import org.springframework.social.oauth2.AccessGrant;
 
 /**
@@ -26,15 +27,34 @@ import org.springframework.social.oauth2.AccessGrant;
  */
 public class GoogleConnectionFactory extends OAuth2ConnectionFactory<Google> {
 
+	private final String clientId;
+
 	public GoogleConnectionFactory(String clientId, String clientSecret) {
 		super("google", new GoogleServiceProvider(clientId, clientSecret),
 				new GoogleAdapter());
+		this.clientId = clientId;
 	}
 
 	@Override
-	protected String extractProviderUserId(AccessGrant accessGrant) {
-		Google api = ((GoogleServiceProvider)getServiceProvider()).getApi(accessGrant.getAccessToken());
-	    UserProfile userProfile = getApiAdapter().fetchUserProfile(api);
-	    return userProfile.getUsername();
+	protected String extractProviderUserId(final AccessGrant accessGrant) {
+		final String accessToken = accessGrant.getAccessToken();
+		final TokenInfo tokenInfo = getGoogleServiceProvider().getApi(accessToken).tokenOperations().getTokenInfo();
+		validateToken(tokenInfo);
+		return tokenInfo.getUserid();
+	}
+
+	protected void validateToken(final TokenInfo tokenInfo) {
+		checkClientId(this.clientId, tokenInfo);
+	}
+
+	protected void checkClientId(final String clientId, final TokenInfo tokenInfo) {
+		if (!clientId.equals(tokenInfo.getAudience())) {
+			throw new InvalidAuthorizationException(
+				String.format("the audience of the tokeninfo [ %s ] does not match clientid [ %s ]", tokenInfo.getAudience(), clientId));
+		}
+	}
+
+	protected GoogleServiceProvider getGoogleServiceProvider() {
+		return (GoogleServiceProvider) getServiceProvider();
 	}
 }
