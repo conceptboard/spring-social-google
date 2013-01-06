@@ -44,6 +44,8 @@ import org.springframework.social.google.api.plus.PlusOperations;
 import org.springframework.social.google.api.plus.impl.PlusTemplate;
 import org.springframework.social.google.api.tasks.TaskOperations;
 import org.springframework.social.google.api.tasks.impl.TaskTemplate;
+import org.springframework.social.google.api.token.TokenOperations;
+import org.springframework.social.google.api.token.impl.TokenTemplate;
 import org.springframework.social.google.api.userinfo.UserInfoOperations;
 import org.springframework.social.google.api.userinfo.impl.UserInfoTemplate;
 import org.springframework.social.oauth2.AbstractOAuth2ApiBinding;
@@ -72,13 +74,14 @@ public class GoogleTemplate extends AbstractOAuth2ApiBinding implements Google {
 	private PlusOperations plusOperations;
 	private TaskOperations taskOperations;
 	private DriveOperations driveOperations;
+	private TokenOperations tokenOperations;
 	
 	/**
 	 * Creates a new instance of GoogleTemplate.
 	 * This constructor creates a new GoogleTemplate able to perform unauthenticated operations against Google+.
 	 */
 	public GoogleTemplate() {
-		this(null, null)
+		this(null, null);
 	}
 	
 	/**
@@ -106,6 +109,7 @@ public class GoogleTemplate extends AbstractOAuth2ApiBinding implements Google {
 		userOperations = new UserInfoTemplate(getRestTemplate(), isAuthorized());
 		plusOperations = new PlusTemplate(getRestTemplate(), isAuthorized());
 		taskOperations = new TaskTemplate(getRestTemplate(), isAuthorized());
+		tokenOperations = new TokenTemplate(getRestTemplate(), isAuthorized(), this.accessToken);
 		driveOperations = new DriveTemplate(getRestTemplate(), isAuthorized());
 	}
 	
@@ -152,6 +156,10 @@ public class GoogleTemplate extends AbstractOAuth2ApiBinding implements Google {
 	@Override
 	public TaskOperations taskOperations() {
 		return taskOperations;
+	}
+	
+	public TokenOperations tokenOperations() {
+		return tokenOperations;
 	}
 	
 	@Override

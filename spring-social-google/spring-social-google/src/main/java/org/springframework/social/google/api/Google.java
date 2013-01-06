@@ -20,6 +20,7 @@ import org.springframework.social.google.api.drive.DriveOperations;
 import org.springframework.social.google.api.impl.GoogleTemplate;
 import org.springframework.social.google.api.plus.PlusOperations;
 import org.springframework.social.google.api.tasks.TaskOperations;
+import org.springframework.social.google.api.token.TokenOperations;
 import org.springframework.social.google.api.userinfo.UserInfoOperations;
 
 /**
@@ -100,4 +101,9 @@ public interface Google extends ApiBinding {
 	 * @return The OAuth2 access token
 	 */
 	String getAccessToken();
+
+	/**
+	 * Retrieves {@link TokenOperations}, used for getting informations about the OAuth Token
+	 */
+	TokenOperations tokenOperations();
 }
