@@ -78,7 +78,7 @@ public class GoogleTemplate extends AbstractOAuth2ApiBinding implements Google {
 	 * This constructor creates a new GoogleTemplate able to perform unauthenticated operations against Google+.
 	 */
 	public GoogleTemplate() {
-		this(null, null)
+		this(null, null);
 	}
 	
 	/**
@@ -174,7 +174,7 @@ public class GoogleTemplate extends AbstractOAuth2ApiBinding implements Google {
 	@Override
 	protected void configureRestTemplate(RestTemplate restTemplate) {
 		super.configureRestTemplate(restTemplate);
-		if (!Strings.isNullOrEmpty(quotaUserId)) {
+		if (null != quotaUserId) {
 			List<ClientHttpRequestInterceptor> interceptors = new LinkedList<ClientHttpRequestInterceptor>();
 			List<ClientHttpRequestInterceptor> currentInterceptors = restTemplate.getInterceptors();
 			if (currentInterceptors != null) {
