@@ -39,11 +39,15 @@ public class GoogleConnectionFactory extends OAuth2ConnectionFactory<Google> {
 	private final boolean offline;
 
 	public GoogleConnectionFactory(String clientId, String clientSecret) {
-		this(clientId, clientSecret, false);
+		this("google", clientId, clientSecret, false);
 	}
 
 	public GoogleConnectionFactory(String clientId, String clientSecret, boolean offline) {
-		super("google", new GoogleServiceProvider(clientId, clientSecret, offline),
+		this("google", clientId, clientSecret, offline);
+	}
+
+	public GoogleConnectionFactory(String providerId, String clientId, String clientSecret, boolean offline) {
+		super(providerId, new GoogleServiceProvider(clientId, clientSecret, offline),
 				new GoogleAdapter());
 		this.clientId = clientId;
 		this.clientSecret = clientSecret;
