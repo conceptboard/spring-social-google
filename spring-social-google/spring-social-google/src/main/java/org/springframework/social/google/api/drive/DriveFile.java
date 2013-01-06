@@ -220,6 +220,10 @@ public class DriveFile extends ApiEntity {
 	
 	private boolean appDataContents;
 	
+	private String downloadUrl;
+	
+	private String iconLink;
+
 	/**
 	 * This field is write-only
 	 */
@@ -339,8 +343,16 @@ public class DriveFile extends ApiEntity {
 	public boolean isViewed() {
 		return labels.viewed;
 	}
-	
+
 	public Thumbnail getThumbnail() {
-	    return thumbnail;
-    }
+		return thumbnail;
+	}
+
+	public String getDownloadUrl(){
+		return downloadUrl;
+	}
+
+	public String getIconLink() {
+		return iconLink;
+	}
 }
