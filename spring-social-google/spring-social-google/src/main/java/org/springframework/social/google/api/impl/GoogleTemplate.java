@@ -182,7 +182,7 @@ public class GoogleTemplate extends AbstractOAuth2ApiBinding implements Google {
 	@Override
 	protected void configureRestTemplate(RestTemplate restTemplate) {
 		super.configureRestTemplate(restTemplate);
-		if (!Strings.isNullOrEmpty(quotaUserId)) {
+		if (null != quotaUserId) {
 			List<ClientHttpRequestInterceptor> interceptors = new LinkedList<ClientHttpRequestInterceptor>();
 			List<ClientHttpRequestInterceptor> currentInterceptors = restTemplate.getInterceptors();
 			if (currentInterceptors != null) {
