@@ -50,6 +50,7 @@ import org.springframework.social.google.api.userinfo.UserInfoOperations;
 import org.springframework.social.google.api.userinfo.impl.UserInfoTemplate;
 import org.springframework.social.oauth2.AbstractOAuth2ApiBinding;
 import org.springframework.social.oauth2.OAuth2Version;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * <p>
@@ -183,7 +184,7 @@ public class GoogleTemplate extends AbstractOAuth2ApiBinding implements Google {
 	protected void configureRestTemplate(RestTemplate restTemplate) {
 		super.configureRestTemplate(restTemplate);
 		if (null != quotaUserId) {
-			List<ClientHttpRequestInterceptor> interceptors = new LinkedList<ClientHttpRequestInterceptor>();
+			List<ClientHttpRequestInterceptor> interceptors = new ArrayList<ClientHttpRequestInterceptor>();
 			List<ClientHttpRequestInterceptor> currentInterceptors = restTemplate.getInterceptors();
 			if (currentInterceptors != null) {
 				interceptors.addAll(currentInterceptors);
