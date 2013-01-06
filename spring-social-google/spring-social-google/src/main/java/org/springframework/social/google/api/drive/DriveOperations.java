@@ -200,6 +200,15 @@ public interface DriveOperations {
 	DriveFile createFolder(String parentId, String name);
 
 	/**
+	 * Touches a file
+	 *
+	 * @param id
+	 *            The id of the file to touch
+	 * @return {@link DriveFile} representing the touched file
+	 */
+	DriveFile touch(String id);
+
+	/**
 	 * Returns the permissions of a file
 	 * 
 	 * @param fileId

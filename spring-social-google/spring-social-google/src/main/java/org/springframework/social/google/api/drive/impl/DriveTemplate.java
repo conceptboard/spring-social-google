@@ -191,6 +191,11 @@ public class DriveTemplate extends AbstractGoogleApiOperations implements
 	}
 
 	@Override
+	public DriveFile touch(String id){
+		return restTemplate.postForObject(DRIVE_FILES_URL + id + "/touch", null, DriveFile.class);
+	}
+
+	@Override
 	public List<UserPermission> getPermissions(String fileId) {
 		return getEntity(DRIVE_FILES_URL + fileId + PERMISSIONS, UserPermissionsList.class).getItems();
 	}
